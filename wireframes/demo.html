@@ -1692,56 +1692,128 @@ function drawFire() {
   if (!cv) return
   const ctx = cv.getContext('2d')
   const w = cv.width, h = cv.height
-  // Terrain (rolling hills, forest)
+  const rng = (seed) => { let x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
+
+  // Base terrain — dry/summer palette, haze tint from altitude
   const tg = ctx.createLinearGradient(0, 0, 0, h)
-  tg.addColorStop(0,'#5a7a3a'); tg.addColorStop(0.6,'#4a6830'); tg.addColorStop(1,'#3d5525')
+  tg.addColorStop(0, '#8faa60'); tg.addColorStop(0.5, '#7a9450'); tg.addColorStop(1, '#6a8040')
   ctx.fillStyle = tg; ctx.fillRect(0, 0, w, h)
-  // Field patches
-  [[0.15,0.3,.18,.14,'#7a9a4a'],[0.55,0.7,.22,.12,'#8aaa50'],[0.05,0.65,.14,.18,'#6a8a40'],
-   [0.72,0.55,.16,.15,'#7a9a4a'],[0.35,0.75,.20,.10,'#c8b460']].forEach(([x,y,dw,dh,c])=>{
-    ctx.fillStyle=c; ctx.fillRect(x*w, y*h, dw*w, dh*h)
-  })
+
+  // Field and forest patches
+  const patches = [
+    [0.0,0.55,.12,.45,'#c8b460'],[0.12,0.6,.18,.4,'#9ab050'],[0.55,0.65,.22,.35,'#aac060'],
+    [0.78,0.5,.22,.5,'#b0c868'],[0.3,0.7,.20,.3,'#d4c070'],[0.62,0.4,.15,.25,'#90a848'],
+    [0.0,0.0,.20,.35,'#6a9040'],[0.80,0.0,.20,.30,'#6a9040'],[0.35,0.0,.30,.2,'#7aa050']
+  ]
+  patches.forEach(([x,y,dw,dh,c]) => { ctx.fillStyle=c; ctx.fillRect(x*w,y*h,dw*w,dh*h) })
+
   // Road
-  ctx.strokeStyle='#bba060'; ctx.lineWidth=3
-  ctx.beginPath(); ctx.moveTo(0,h*0.6); ctx.bezierCurveTo(w*0.3,h*0.55,w*0.6,h*0.65,w,h*0.6); ctx.stroke()
-  // River
-  ctx.strokeStyle='#5090d0'; ctx.lineWidth=2
-  ctx.beginPath(); ctx.moveTo(0,h*0.75); ctx.bezierCurveTo(w*0.2,h*0.72,w*0.5,h*0.78,w,h*0.74); ctx.stroke()
-  // Fire area (active combustion pixels)
-  const fireX = w*0.42, fireY = h*0.48, fireR = 30
-  const rng = (seed) => { let x = Math.sin(seed)*10000; return x - Math.floor(x) }
-  for (let i = 0; i < 600; i++) {
-    const angle = rng(i*7.3) * Math.PI * 2
-    const dist = rng(i*3.1) * fireR
-    const px = fireX + Math.cos(angle)*dist*(1+rng(i*1.7)*0.4)
-    const py = fireY + Math.sin(angle)*dist*0.6
-    const intensity = 1 - dist/fireR
-    ctx.fillStyle = `rgba(${220+rng(i)*35|0},${(80*intensity)|0},0,0.9)`
-    ctx.fillRect(px, py, 2, 2)
+  ctx.strokeStyle='#c8b878'; ctx.lineWidth=2.5
+  ctx.beginPath(); ctx.moveTo(0,h*0.68); ctx.bezierCurveTo(w*0.25,h*0.64,w*0.55,h*0.7,w,h*0.65); ctx.stroke()
+  // Secondary road
+  ctx.lineWidth=1.5; ctx.strokeStyle='#b8a868'
+  ctx.beginPath(); ctx.moveTo(w*0.5,0); ctx.lineTo(w*0.48,h*0.65); ctx.stroke()
+
+  // ── SCORCHED / BURNT ZONE around fire ──────────────────────
+  const fireX = w * 0.48, fireY = h * 0.42, fireR = 38
+  const burnGrad = ctx.createRadialGradient(fireX, fireY, 0, fireX, fireY, fireR * 1.8)
+  burnGrad.addColorStop(0,   'rgba(20,10,5,0.98)')
+  burnGrad.addColorStop(0.35,'rgba(40,18,5,0.95)')
+  burnGrad.addColorStop(0.7, 'rgba(60,30,10,0.75)')
+  burnGrad.addColorStop(1,   'rgba(80,50,20,0)')
+  ctx.fillStyle = burnGrad; ctx.beginPath(); ctx.ellipse(fireX, fireY, fireR*1.8, fireR*1.4, 0, 0, Math.PI*2); ctx.fill()
+
+  // ── SMOKE PLUME — billowing SW, drawn before fire so fire sits on top ──
+  // Plume origin at fire, drifts upper-left
+  const plumeSteps = 90
+  for (let t = plumeSteps; t >= 0; t--) {
+    const progress = t / plumeSteps
+    const wx = -progress * w * 0.72            // drift left
+    const wy = -progress * h * 0.52            // drift up
+    const waver = Math.sin(progress * 8) * w * 0.04
+    const px = fireX + wx + waver
+    const py = fireY + wy
+    const radius = 10 + progress * 55
+    const alpha = progress < 0.05 ? progress * 8 * 0.52 : 0.52 * (1 - progress * 0.55)
+    const dark = (20 + progress * 140) | 0
+    const brown = (dark + 20 + rng(t) * 15) | 0
+    ctx.fillStyle = `rgba(${brown},${dark},${(dark*0.75)|0},${alpha.toFixed(2)})`
+    ctx.beginPath(); ctx.arc(px, py, radius * (0.8 + rng(t*3)*0.4), 0, Math.PI*2); ctx.fill()
   }
-  // Smoke plume (SW direction)
-  for (let t = 0; t < 60; t++) {
-    const progress = t / 60
-    const px = fireX - progress * w * 0.55
-    const py = fireY - progress * h * 0.38
-    const radius = 8 + progress * 40
-    const alpha = 0.55 * (1 - progress * 0.7)
-    const grey = 80 + progress * 60 | 0
-    ctx.fillStyle = `rgba(${grey},${grey},${grey},${alpha})`
+  // Dense black smoke near source
+  for (let t = 0; t < 18; t++) {
+    const progress = t / 18
+    const px = fireX - progress * w * 0.1 + Math.sin(t*1.4)*8
+    const py = fireY - progress * h * 0.18
+    const radius = 14 + progress * 18
+    ctx.fillStyle = `rgba(15,10,8,${(0.75*(1-progress*0.4)).toFixed(2)})`
     ctx.beginPath(); ctx.arc(px, py, radius, 0, Math.PI*2); ctx.fill()
   }
-  // Fire hotspot marker
-  ctx.strokeStyle='#ff0'; ctx.lineWidth=1.5
-  ctx.beginPath(); ctx.arc(fireX, fireY, fireR+6, 0, Math.PI*2); ctx.stroke()
-  ctx.setLineDash([3,3]); ctx.strokeStyle='#f00'
-  ctx.beginPath(); ctx.arc(fireX, fireY, fireR+12, 0, Math.PI*2); ctx.stroke()
+
+  // ── ACTIVE FIRE PIXELS — bright, prominent ──────────────────
+  // Outer glow
+  const glowGrad = ctx.createRadialGradient(fireX, fireY, 0, fireX, fireY, fireR * 1.1)
+  glowGrad.addColorStop(0,   'rgba(255,180,0,0.7)')
+  glowGrad.addColorStop(0.5, 'rgba(255,80,0,0.4)')
+  glowGrad.addColorStop(1,   'rgba(200,20,0,0)')
+  ctx.fillStyle = glowGrad; ctx.beginPath(); ctx.ellipse(fireX, fireY, fireR*1.1, fireR*0.85, 0, 0, Math.PI*2); ctx.fill()
+
+  // Individual fire pixels — dense, saturated
+  for (let i = 0; i < 1200; i++) {
+    const angle = rng(i * 5.1) * Math.PI * 2
+    const dist = Math.pow(rng(i * 2.3), 0.6) * fireR
+    const px = fireX + Math.cos(angle) * dist * (0.9 + rng(i*1.1)*0.3)
+    const py = fireY + Math.sin(angle) * dist * 0.7
+    const intensity = 1 - dist / fireR
+    const r = (230 + rng(i)*25) | 0
+    const g = (intensity > 0.5 ? 160 * (intensity - 0.5) * 2 : 0) | 0
+    ctx.fillStyle = `rgba(${r},${g},0,${(0.85 + rng(i*7)*0.15).toFixed(2)})`
+    ctx.fillRect(px - 1, py - 1, 2 + (rng(i*9)>0.7?1:0), 2 + (rng(i*11)>0.7?1:0))
+  }
+  // Bright white-yellow core
+  const coreGrad = ctx.createRadialGradient(fireX, fireY, 0, fireX, fireY, fireR * 0.4)
+  coreGrad.addColorStop(0,   'rgba(255,255,200,0.9)')
+  coreGrad.addColorStop(0.5, 'rgba(255,220,50,0.6)')
+  coreGrad.addColorStop(1,   'rgba(255,100,0,0)')
+  ctx.fillStyle = coreGrad; ctx.beginPath(); ctx.ellipse(fireX, fireY, fireR*0.4, fireR*0.3, 0, 0, Math.PI*2); ctx.fill()
+
+  // ── DETECTION OVERLAYS ──────────────────────────────────────
+  // Hotspot bounding box
+  ctx.strokeStyle = '#ffdd00'; ctx.lineWidth = 1.5; ctx.setLineDash([5,3])
+  ctx.strokeRect(fireX - fireR*1.3, fireY - fireR*1.1, fireR*2.6, fireR*2.0)
   ctx.setLineDash([])
-  // Label
-  ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(6,6,150,30)
-  ctx.fillStyle='#ff6600'; ctx.font='bold 9px sans-serif'; ctx.textAlign='left'
-  ctx.fillText('ACTIVE FIRE · confidence 94%', 10, 17)
-  ctx.fillStyle='#bbb'; ctx.font='8px sans-serif'
-  ctx.fillText('Smoke plume ~240° SSW · est. 18 km', 10, 30)
+  // Corner ticks
+  const bx = fireX - fireR*1.3, by = fireY - fireR*1.1, bw2 = fireR*2.6, bh2 = fireR*2.0, tk = 8
+  ctx.strokeStyle='#ff0'; ctx.lineWidth=2
+  ;[[bx,by],[bx+bw2,by],[bx,by+bh2],[bx+bw2,by+bh2]].forEach(([cx,cy],i) => {
+    const sx = i%2===1?-1:1, sy = i>1?-1:1
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+tk*sx,cy); ctx.moveTo(cx,cy); ctx.lineTo(cx,cy+tk*sy); ctx.stroke()
+  })
+  // Confidence label on bounding box
+  ctx.fillStyle='#ffdd00'; ctx.font='bold 8px sans-serif'; ctx.textAlign='left'
+  ctx.fillText('HOT SPOT · 94%', bx+2, by-2)
+  // FRP readout
+  ctx.fillStyle='rgba(0,0,0,0.6)'; ctx.fillRect(bx, by+bh2+2, 90, 13)
+  ctx.fillStyle='#ffa040'; ctx.font='8px sans-serif'
+  ctx.fillText('FRP: 312 MW', bx+3, by+bh2+11)
+
+  // Plume vector arrow
+  ctx.strokeStyle='rgba(200,200,200,0.7)'; ctx.lineWidth=1.5
+  const arrowEndX = fireX - w*0.22, arrowEndY = fireY - h*0.18
+  ctx.beginPath(); ctx.moveTo(fireX, fireY - fireR); ctx.lineTo(arrowEndX, arrowEndY); ctx.stroke()
+  ctx.fillStyle='rgba(200,200,200,0.7)'
+  const ang2 = Math.atan2(arrowEndY-(fireY-fireR), arrowEndX-fireX)
+  ctx.save(); ctx.translate(arrowEndX, arrowEndY); ctx.rotate(ang2)
+  ctx.beginPath(); ctx.moveTo(6,0); ctx.lineTo(-4,4); ctx.lineTo(-4,-4); ctx.closePath(); ctx.fill(); ctx.restore()
+  ctx.fillStyle='rgba(200,200,200,0.8)'; ctx.font='8px sans-serif'; ctx.textAlign='center'
+  ctx.fillText('240° SSW', arrowEndX-14, arrowEndY-4)
+
+  // ── INFO OVERLAY ────────────────────────────────────────────
+  ctx.fillStyle='rgba(0,0,0,0.62)'; ctx.fillRect(0, h-36, w, 36)
+  ctx.fillStyle='#ff6020'; ctx.font='bold 9px sans-serif'; ctx.textAlign='left'
+  ctx.fillText('ACTIVE FIRE DETECTION', 8, h-22)
+  ctx.fillStyle='#ffaa60'; ctx.font='8px sans-serif'
+  ctx.fillText('Area ≈ 5.4 km²  ·  Plume ~18 km SSW  ·  Alt 8,650 m  ·  RGB Sony IMX585', 8, h-10)
 }
 
 window.addEventListener('load', () => {
