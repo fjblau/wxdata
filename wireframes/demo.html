@@ -154,6 +154,7 @@
   <button onclick="show('bufr',this)">📋 BUFR Field Mapping</button>
   <button onclick="show('stratochaser',this)">🎈 StratoChaser Extension</button>
   <button onclick="show('analytics',this)">📈 Analytics</button>
+  <button onclick="show('tephigram',this)">🌡 Tephigram</button>
 </nav>
 
 <!-- ─────────────────────────────────────────── -->
@@ -844,57 +845,88 @@
     </div>
   </div>
 
-  <!-- Tephigram / Skew-T row -->
-  <div style="margin-top:16px">
-    <div class="card" style="padding:20px 16px 16px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-        <div>
-          <h3 style="margin:0">Skew-T Log-P (Tephigram) · Example Radiosonde Ascent</h3>
-          <div style="font-size:.75rem;color:#889;margin-top:3px">
-            Synthetic sounding anchored to station IFELDK137 surface conditions (10°C / 1010 hPa) · standard met service output format
-          </div>
-        </div>
-        <div style="text-align:right;font-size:.72rem;color:#889">
-          <span class="badge custom">StratoChaser domain: above 100 hPa</span>
+</div>
+
+<!-- ─────────────────────────────────────────── -->
+<!-- SCREEN 6: TEPHIGRAM                        -->
+<!-- ─────────────────────────────────────────── -->
+<div id="tephigram" class="screen">
+  <h2>Skew-T Log-P (Tephigram) · Radiosonde Ascent</h2>
+  <p class="section-desc">Synthetic sounding anchored to station IFELDK137 surface conditions (10°C / 1010 hPa) · standard NMS/ECMWF output format · <span class="badge custom">StratoChaser domain: above 100 hPa</span></p>
+
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start">
+    <div class="card" style="padding:16px 12px 16px">
+      <canvas id="cvSkewT" height="620" style="width:100%;display:block"></canvas>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card" style="padding:16px">
+        <h3 style="margin-bottom:10px">Diagram elements</h3>
+        <div style="font-size:.78rem;line-height:1.85;display:grid;grid-template-columns:14px 1fr;gap:2px 8px;align-items:center">
+          <div style="height:2.5px;background:#e63946;border-radius:2px"></div><div>Temperature profile (T)</div>
+          <div style="height:2.5px;background:#2d9e6e;border-radius:2px"></div><div>Dew point profile (Td)</div>
+          <div style="height:1px;border-top:1px dashed #99a"></div><div>Isotherms (10°C steps)</div>
+          <div style="height:1.5px;background:rgba(255,130,0,0.6);border-radius:2px"></div><div>Dry adiabats (θ)</div>
+          <div style="height:1.5px;background:rgba(0,160,100,0.6);border-radius:2px"></div><div>Saturated adiabats (θw)</div>
+          <div style="height:1px;background:#c8cce0"></div><div>Isobars (hPa)</div>
+          <div style="width:8px;height:8px;background:#334;border-radius:1px"></div><div>Wind barbs (m/s per flag)</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 260px;gap:20px;align-items:start;margin-top:14px">
-        <canvas id="cvSkewT" height="520" style="width:100%;display:block"></canvas>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="font-size:.78rem;line-height:1.7">
-            <div style="font-weight:600;margin-bottom:6px;color:#445">Diagram elements</div>
-            <div style="display:grid;grid-template-columns:14px 1fr;gap:3px 8px;align-items:center">
-              <div style="height:2px;background:#e63946"></div><div>Temperature (T)</div>
-              <div style="height:2px;background:#2d9e6e"></div><div>Dew Point (Td)</div>
-              <div style="height:1px;background:#aac;border-top:1px dashed #aac"></div><div>Isotherms (10°C steps)</div>
-              <div style="height:2px;background:rgba(255,130,0,0.5)"></div><div>Dry adiabats</div>
-              <div style="height:2px;background:rgba(0,180,120,0.4)"></div><div>Sat. adiabats</div>
-              <div style="height:2px;background:#7b2d8b"></div><div>Isobars</div>
-            </div>
-          </div>
-          <div style="background:#f0f7ff;border-radius:8px;padding:12px;font-size:.75rem;line-height:1.7">
-            <div style="font-weight:600;margin-bottom:4px;color:#1565c0">Key levels</div>
-            <div><strong>LCL</strong> ~900 hPa: Lifting Condensation Level</div>
-            <div><strong>LFC</strong> ~780 hPa: Level of Free Convection</div>
-            <div><strong>Tropopause</strong> ~200 hPa (~12 km)</div>
-            <div style="color:#7b2d8b;margin-top:4px"><strong>Stratosphere begins</strong> — traditional radiosondes rarely reach here</div>
-          </div>
-          <div style="background:#f3e5f5;border-radius:8px;padding:12px;font-size:.75rem;line-height:1.7">
-            <div style="font-weight:600;margin-bottom:4px;color:#7b2d8b">StratoChaser domain</div>
-            <div>Above 100 hPa (~16 km) the temperature profile <em>reverses</em> — stratospheric warming. Standard NWP models have sparse data here.</div>
-            <div style="margin-top:6px">A reusable radiosonde platform reaching 30–50 km would fill a genuine observational gap, especially for:</div>
-            <ul style="margin:4px 0 0 14px">
-              <li>Ozone layer monitoring</li>
-              <li>Aviation corridor planning</li>
-              <li>Atmospheric drag modelling (re-entry / launch)</li>
-              <li>Space weather coupling effects</li>
-            </ul>
-          </div>
-          <div style="background:#fff9c4;border-radius:8px;padding:12px;font-size:.75rem;line-height:1.6">
-            <div style="font-weight:600;margin-bottom:4px">BUFR encoding note</div>
-            <div>Each level → one BUFR record with descriptors 010004 (p), 012101 (T), 012003 (Td), 011001/002 (wind). Custom payloads added as Section 2 or proposed new Table B entries.</div>
-          </div>
+
+      <div class="card" style="padding:16px">
+        <h3 style="margin-bottom:10px">Key levels</h3>
+        <div style="font-size:.78rem;line-height:1.85">
+          <div>📍 <strong>Surface</strong> 1010 hPa · 10°C (IFELDK137)</div>
+          <div>☁️ <strong>LCL</strong> ~900 hPa · ~0.9 km</div>
+          <div>⬆️ <strong>LFC</strong> ~780 hPa · ~2.2 km</div>
+          <div>✈️ <strong>500 hPa</strong> · ~5.5 km · -17°C</div>
+          <div>🌐 <strong>Tropopause</strong> ~200 hPa · ~12 km</div>
+          <div style="color:#7b2d8b;margin-top:6px">🎈 <strong>Stratosphere</strong> above 100 hPa — temperature reverses (warming)</div>
         </div>
+      </div>
+
+      <div class="card" style="padding:16px;border-left:4px solid #7b2d8b">
+        <h3 style="margin-bottom:8px;color:#7b2d8b">StratoChaser domain</h3>
+        <p style="font-size:.78rem;line-height:1.7;margin-bottom:8px">Above 100 hPa (~16 km) the profile <em>reverses</em> — the stratosphere warms with altitude. Traditional radiosondes burst before reaching here.</p>
+        <p style="font-size:.78rem;line-height:1.7;margin-bottom:8px">A reusable platform reaching 30–50 km fills a genuine observational gap for:</p>
+        <ul style="font-size:.78rem;line-height:1.85;margin-left:16px">
+          <li>Ozone layer monitoring</li>
+          <li>Aviation corridor planning</li>
+          <li>Atmospheric drag modelling</li>
+          <li>Space weather coupling</li>
+          <li>Climate baseline data</li>
+        </ul>
+      </div>
+
+      <div class="card" style="padding:16px;background:#fff9c4">
+        <h3 style="margin-bottom:8px">BUFR encoding</h3>
+        <div style="font-size:.75rem;line-height:1.7">
+          Each pressure level → one BUFR record:
+          <div style="margin:6px 0;font-family:monospace;font-size:.7rem;background:#fff;padding:8px;border-radius:4px;line-height:1.9">
+            010004 → pressure<br>
+            012101 → temperature<br>
+            012003 → dew point<br>
+            011001 → wind direction<br>
+            011002 → wind speed<br>
+            <span style="color:#c05e00">Section 2 → custom payloads</span>
+          </div>
+          Up to 7,000+ levels per flight in high-resolution BUFR.
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px">
+        <h3 style="margin-bottom:8px">Sounding data</h3>
+        <table style="font-size:.7rem">
+          <thead>
+            <tr style="border-bottom:2px solid #eee">
+              <th style="padding:3px 6px;text-align:right">hPa</th>
+              <th style="padding:3px 6px;text-align:right">T (°C)</th>
+              <th style="padding:3px 6px;text-align:right">Td (°C)</th>
+              <th style="padding:3px 6px;text-align:right">Ws</th>
+            </tr>
+          </thead>
+          <tbody id="soundingTable"></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -915,6 +947,7 @@ function show(id, btn) {
   document.getElementById(id).classList.add('active')
   btn.classList.add('active')
   if (id === 'analytics') drawAll()
+  if (id === 'tephigram') drawTephigram()
 }
 
 // ── Raw data ────────────────────────────────
@@ -1597,7 +1630,28 @@ function drawAll() {
   drawAxis('cvKAxis')
 
   drawWindRose()
+}
+
+// ── Tephigram entry point ─────────────────────
+let tephDrawn = false
+function drawTephigram() {
+  if (tephDrawn) return
+  tephDrawn = true
   drawSkewT()
+  // Populate sounding table
+  const tbody = document.getElementById('soundingTable')
+  if (tbody) {
+    tbody.innerHTML = SOUNDING.map(([p, T, Td, ws, wd], i) => {
+      const isStrato = p <= 100
+      const bg = isStrato ? 'background:#f9f0ff' : (p <= 200 ? 'background:#f0f4ff' : '')
+      return `<tr style="${bg}">
+        <td style="padding:3px 6px;text-align:right;font-weight:${p===1010?'700':'400'}">${p}</td>
+        <td style="padding:3px 6px;text-align:right;color:#e63946">${T.toFixed(1)}</td>
+        <td style="padding:3px 6px;text-align:right;color:#2d9e6e">${Td.toFixed(1)}</td>
+        <td style="padding:3px 6px;text-align:right">${ws} m/s</td>
+      </tr>`
+    }).join('')
+  }
 }
 </script>
 </body>
