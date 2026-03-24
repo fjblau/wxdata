@@ -156,6 +156,7 @@
   <button onclick="show('analytics',this)">📈 Analytics</button>
   <button onclick="show('tephigram',this)">🌡 Tephigram</button>
   <button onclick="show('competitive',this)">⚖️ Competitive</button>
+  <button onclick="show('closer',this)">🎯 The Proposal</button>
 </nav>
 
 <!-- ─────────────────────────────────────────── -->
@@ -1154,14 +1155,8 @@
         </div>
       </div>
       <div style="padding:12px;background:#fff3e0;border-radius:8px;font-size:.78rem;line-height:1.7">
-        <strong>Relevance for data architecture:</strong><br>
-        CPAS treats the Skew-T diagram as the handoff point between observation and NWP model ingestion. This confirms that a StratoChaser data pipeline should output:
-        <ol style="margin:8px 0 0 16px;line-height:2">
-          <li>BUFR files (for NMS/ECMWF ingestion)</li>
-          <li>Skew-T–ready JSON profiles (for web visualization)</li>
-          <li>NWP-ready vertical profiles (for model initialization)</li>
-        </ol>
-        Three output formats, one multi-model store.
+        CPAS treats the Skew-T as the handoff between observation and NWP model ingestion — confirming StratoChaser needs three output formats from one data store.
+        <div style="margin-top:8px;color:#c05e00;font-weight:600;cursor:pointer" onclick="document.querySelector('[onclick*=closer]').click()">→ See The Proposal for the full architecture close</div>
       </div>
     </div>
   </div>
@@ -1183,6 +1178,141 @@
         <p style="font-size:.75rem;line-height:1.7;color:#ccd">Existing tools store data in proprietary databases or flat files. A FAIR-compliant, multi-model architecture (document + graph + KV) with BUFR mapping, open REST API, and flexible custom-payload schema is a first-principles rebuild of the radiosonde data stack.</p>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────── -->
+<!-- SCREEN 8: THE PROPOSAL (CLOSER)            -->
+<!-- ─────────────────────────────────────────── -->
+<div id="closer" class="screen">
+  <div style="max-width:860px;margin:0 auto">
+
+    <!-- headline -->
+    <div style="text-align:center;padding:20px 0 32px">
+      <div style="font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;color:#889;margin-bottom:10px">Data Architecture Proposal</div>
+      <h1 style="font-size:2rem;font-weight:800;line-height:1.2;color:#1a1a2e;margin-bottom:12px">Three output formats.<br>One multi-model store.</h1>
+      <p style="font-size:.95rem;color:#556;max-width:580px;margin:0 auto;line-height:1.7">
+        Every existing radiosonde platform forces a choice between data standards, visualization, and model ingestion. StratoChaser's architecture delivers all three from a single pipeline — without migration, without vendor lock-in.
+      </p>
+    </div>
+
+    <!-- three outputs -->
+    <div class="grid-3" style="margin-bottom:28px">
+      <div style="background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:4px solid #4cc9f0;text-align:center">
+        <div style="font-size:2rem;margin-bottom:8px">📡</div>
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:6px">BUFR Files</div>
+        <div style="font-size:.75rem;color:#889;margin-bottom:12px">WMO / NMS / ECMWF ingestion</div>
+        <div style="font-family:monospace;font-size:.72rem;background:#f0f8ff;padding:10px;border-radius:6px;text-align:left;line-height:1.9">
+          010004 → pressure<br>
+          012101 → temperature<br>
+          012003 → dew point<br>
+          011001 → wind dir<br>
+          011002 → wind speed<br>
+          <span style="color:#7b2d8b">Sect.2 → custom payloads</span>
+        </div>
+        <div style="margin-top:10px;font-size:.72rem;color:#4cc9f0">Standard fields auto-mapped · custom fields flagged</div>
+      </div>
+
+      <div style="background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:4px solid #e63946;text-align:center">
+        <div style="font-size:2rem;margin-bottom:8px">🌡</div>
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:6px">Skew-T JSON Profile</div>
+        <div style="font-size:.75rem;color:#889;margin-bottom:12px">Web visualization · researcher access</div>
+        <div style="font-family:monospace;font-size:.72rem;background:#fff5f5;padding:10px;border-radius:6px;text-align:left;line-height:1.9">
+          {<br>
+          &nbsp;"flight_id": "SC-2026-03",<br>
+          &nbsp;"levels": [<br>
+          &nbsp;&nbsp;{"p":1010,"T":10,"Td":0},<br>
+          &nbsp;&nbsp;{"p":500,"T":-17,"Td":-33},<br>
+          &nbsp;&nbsp;{"p":50,"T":-53,"Td":-85}<br>
+          &nbsp;],<br>
+          &nbsp;"payloads": { ... }<br>
+          }
+        </div>
+        <div style="margin-top:10px;font-size:.72rem;color:#e63946">Schema-flexible · custom payload fields included</div>
+      </div>
+
+      <div style="background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:4px solid #06d6a0;text-align:center">
+        <div style="font-size:2rem;margin-bottom:8px">🌦</div>
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:6px">NWP Vertical Profile</div>
+        <div style="font-size:.75rem;color:#889;margin-bottom:12px">WRF / MPAS-A / ECMWF model init</div>
+        <div style="font-family:monospace;font-size:.72rem;background:#f0fff8;padding:10px;border-radius:6px;text-align:left;line-height:1.9">
+          TTAA  26001 11035<br>
+          99010 01000 09025<br>
+          00100 -6504 -7902<br>
+          50550 -1703 -3303<br>
+          ...<br>
+          <span style="color:#888">// WMO FM-35 TEMP format</span><br>
+          <span style="color:#06843a">// or netCDF / GRIB2</span>
+        </div>
+        <div style="margin-top:10px;font-size:.72rem;color:#06d6a0">Drives forecast models · NWP assimilation</div>
+      </div>
+    </div>
+
+    <!-- one store -->
+    <div style="background:#1a1a2e;border-radius:14px;padding:28px 32px;margin-bottom:28px;color:#fff">
+      <div style="text-align:center;margin-bottom:22px">
+        <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:#4cc9f0;margin-bottom:6px">Powered by</div>
+        <div style="font-size:1.4rem;font-weight:800">ArangoDB Multi-Model Store</div>
+        <div style="font-size:.8rem;color:#8899aa;margin-top:4px">Document · Graph · Key-Value — one database, no trade-offs</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+        <div style="background:rgba(76,201,240,0.1);border:1px solid rgba(76,201,240,0.2);border-radius:8px;padding:16px">
+          <div style="font-size:.8rem;font-weight:700;color:#4cc9f0;margin-bottom:8px">Document</div>
+          <div style="font-size:.73rem;color:#aab;line-height:1.7">Each level stored as a schema-flexible JSON document. New payload fields added without migration. BUFR status tagged on every field.</div>
+        </div>
+        <div style="background:rgba(123,45,139,0.2);border:1px solid rgba(123,45,139,0.3);border-radius:8px;padding:16px">
+          <div style="font-size:.8rem;font-weight:700;color:#c084fc;margin-bottom:8px">Graph</div>
+          <div style="font-size:.73rem;color:#aab;line-height:1.7">Flight → Platform → Payload → Level. Data lineage is first-class. Query: "give me every ozone reading from flights above 20 km."</div>
+        </div>
+        <div style="background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.2);border-radius:8px;padding:16px">
+          <div style="font-size:.8rem;font-weight:700;color:#06d6a0;margin-bottom:8px">Key-Value</div>
+          <div style="font-size:.73rem;color:#aab;line-height:1.7">Current conditions cached per station. Sub-millisecond reads for live dashboard. Last-seen timestamps, real-time ascent telemetry.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- what frank brings -->
+    <div style="background:#fff;border-radius:12px;padding:28px 32px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:28px">
+      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:#889;margin-bottom:12px">What a Chief Data Officer brings</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-size:.88rem;font-weight:700;margin-bottom:12px;color:#1a1a2e">Architecture decisions that compound</div>
+          <ul style="font-size:.78rem;line-height:2;color:#445;list-style:none;padding:0">
+            <li>✦ BUFR compliance from day one — not retrofitted</li>
+            <li>✦ Schema designed for open payloads, not bolted on</li>
+            <li>✦ FAIR data principles baked in — EU Horizon ready</li>
+            <li>✦ Graph model makes data provenance auditable</li>
+            <li>✦ REST API designed for researcher self-service</li>
+            <li>✦ Output formats that feed NMS, viz, and NWP</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:.88rem;font-weight:700;margin-bottom:12px;color:#1a1a2e">The data becomes the product</div>
+          <p style="font-size:.78rem;line-height:1.8;color:#445;margin-bottom:10px">A radiosonde company that thinks of itself as a <em>hardware</em> company will be disrupted. One that thinks of itself as a <em>data</em> company builds a moat.</p>
+          <p style="font-size:.78rem;line-height:1.8;color:#445;margin-bottom:10px">The longitudinal atmospheric dataset — especially above 100 hPa where no one else has reusable coverage — is the long-term asset.</p>
+          <p style="font-size:.78rem;line-height:1.8;color:#7b2d8b;font-weight:600">A CDO shapes that asset from the first flight.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- this demo -->
+    <div style="background:#f0f8ff;border-radius:12px;padding:20px 28px;border:1px solid #b3d4f5;text-align:center">
+      <div style="font-size:.75rem;color:#1565c0;font-weight:600;margin-bottom:6px">This demonstration</div>
+      <p style="font-size:.82rem;color:#334;line-height:1.7;margin-bottom:8px">
+        Built on live data from a personal weather station in Feldkirch — pulling from Elasticsearch, structured for ArangoDB, visualised with standard met formats (meteogram, wind rose, Skew-T log-P). The same architecture, scaled to StratoChaser's flight cadence, is the data platform the company needs.
+      </p>
+      <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:10px">
+        <span class="tag blue">Live Elasticsearch source</span>
+        <span class="tag purple">ArangoDB multi-model</span>
+        <span class="tag green">BUFR field mapping</span>
+        <span class="tag blue">Skew-T / meteogram</span>
+        <span class="tag orange">Custom payload handling</span>
+      </div>
+      <div style="margin-top:14px;font-size:.75rem;color:#889">
+        github.com/fjblau/wxdata · <span style="color:#06d6a0">●</span> live · Station IFELDK137 · Feldkirch, AT
+      </div>
+    </div>
+
   </div>
 </div>
 
