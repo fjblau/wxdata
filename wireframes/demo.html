@@ -1203,7 +1203,7 @@
 
     <!-- Thermal IR ground -->
     <div class="card" style="padding:0;overflow:hidden;cursor:pointer" onclick="selectFile(0)" id="fc0">
-      <canvas id="cvTherm" width="320" height="180" style="width:100%;display:block"></canvas>
+      <img id="cvTherm" width="320" height="180" style="width:100%;display:block">
       <div style="padding:12px 14px">
         <div style="font-size:.72rem;font-family:monospace;color:#4cc9f0;margin-bottom:3px">flight_SC0324_IR_thermal_surface.tiff</div>
         <div style="font-size:.7rem;color:#889">LWIR thermal · 15,432 m · 2026-03-24T07:18:04Z</div>
@@ -1215,7 +1215,7 @@
 
     <!-- AIS ship tracking -->
     <div class="card" style="padding:0;overflow:hidden;cursor:pointer" onclick="selectFile(1)" id="fc1">
-      <canvas id="cvAIS" width="320" height="180" style="width:100%;display:block"></canvas>
+      <img id="cvAIS" width="320" height="180" style="width:100%;display:block">
       <div style="padding:12px 14px">
         <div style="font-size:.72rem;font-family:monospace;color:#4cc9f0;margin-bottom:3px">flight_SC0324_AIS_vessel_composite.geojson</div>
         <div style="font-size:.7rem;color:#889">AIS overlay · 22,100 m · 2026-03-24T07:48:31Z</div>
@@ -1227,7 +1227,7 @@
 
     <!-- Fire / smoke -->
     <div class="card" style="padding:0;overflow:hidden;cursor:pointer" onclick="selectFile(2)" id="fc2">
-      <canvas id="cvFire" width="320" height="180" style="width:100%;display:block"></canvas>
+      <img id="cvFire" width="320" height="180" style="width:100%;display:block">
       <div style="padding:12px 14px">
         <div style="font-size:.72rem;font-family:monospace;color:#4cc9f0;margin-bottom:3px">flight_SC0324_fire_smoke_RGB.jpg</div>
         <div style="font-size:.7rem;color:#889">Fire detection · 8,650 m · 2026-03-24T07:04:12Z</div>
@@ -1573,8 +1573,10 @@ function selectFile(idx) {
 }
 
 function drawThermal() {
-  const cv = document.getElementById('cvTherm')
-  if (!cv) return
+  const img = document.getElementById('cvTherm')
+  if (!img) return
+  const cv = document.createElement('canvas')
+  cv.width = 320; cv.height = 180
   const ctx = cv.getContext('2d')
   const w = cv.width, h = cv.height
 
@@ -1796,11 +1798,14 @@ function drawThermal() {
   ctx.fillStyle='rgba(0,0,0,0.60)'; ctx.fillRect(0,0,w,16)
   ctx.fillStyle='#c8e0ff'; ctx.font='bold 8px sans-serif'; ctx.textAlign='left'
   ctx.fillText('LWIR THERMAL · 15,432 m · IRONBOW · Power grid overlay', 4, 11)
+  img.src = cv.toDataURL()
 }
 
 function drawAIS() {
-  const cv = document.getElementById('cvAIS')
-  if (!cv) return
+  const img = document.getElementById('cvAIS')
+  if (!img) return
+  const cv = document.createElement('canvas')
+  cv.width = 320; cv.height = 180
   const ctx = cv.getContext('2d')
   const w = cv.width, h = cv.height
   // Ocean background gradient
@@ -1855,11 +1860,14 @@ function drawAIS() {
   })
   ctx.fillStyle='rgba(100,180,255,0.8)'; ctx.font='bold 9px sans-serif'; ctx.textAlign='left'
   ctx.fillText('AIS · 14 vessels · 22,100 m', 10, ly+2)
+  img.src = cv.toDataURL()
 }
 
 function drawFire() {
-  const cv = document.getElementById('cvFire')
-  if (!cv) return
+  const img = document.getElementById('cvFire')
+  if (!img) return
+  const cv = document.createElement('canvas')
+  cv.width = 320; cv.height = 180
   const ctx = cv.getContext('2d')
   const w = cv.width, h = cv.height
   const rng = (seed) => { let x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
@@ -1984,6 +1992,7 @@ function drawFire() {
   ctx.fillText('ACTIVE FIRE DETECTION', 8, h-22)
   ctx.fillStyle='#ffaa60'; ctx.font='8px sans-serif'
   ctx.fillText('Area ≈ 5.4 km²  ·  Plume ~18 km SSW  ·  Alt 8,650 m  ·  RGB Sony IMX585', 8, h-10)
+  img.src = cv.toDataURL('image/jpeg', 0.92)
 }
 
 window.addEventListener('load', () => {
