@@ -155,6 +155,7 @@
   <button onclick="show('stratochaser',this)">🎈 StratoChaser Extension</button>
   <button onclick="show('analytics',this)">📈 Analytics</button>
   <button onclick="show('tephigram',this)">🌡 Tephigram</button>
+  <button onclick="show('competitive',this)">⚖️ Competitive</button>
 </nav>
 
 <!-- ─────────────────────────────────────────── -->
@@ -927,6 +928,259 @@
           </thead>
           <tbody id="soundingTable"></tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────── -->
+<!-- SCREEN 7: COMPETITIVE ANALYSIS             -->
+<!-- ─────────────────────────────────────────── -->
+<div id="competitive" class="screen">
+  <h2>Competitive Landscape</h2>
+  <p class="section-desc">Existing tools and research in radiosonde data collection, software, and visualization — and where StratoChaser's open, reusable platform fits.</p>
+
+  <!-- Feature matrix -->
+  <div class="card" style="margin-bottom:16px;overflow-x:auto">
+    <h3 style="margin-bottom:14px">Feature Comparison Matrix</h3>
+    <table style="min-width:780px">
+      <thead>
+        <tr style="background:#f7f8fa">
+          <th style="padding:10px 12px;text-align:left;min-width:160px">Capability</th>
+          <th style="padding:10px 12px;text-align:center;color:#c05e00">Vaisala<br><span style="font-weight:400;font-size:.7rem">DigiCORA / RS41</span></th>
+          <th style="padding:10px 12px;text-align:center;color:#1565c0">GRAW<br><span style="font-weight:400;font-size:.7rem">grawMet</span></th>
+          <th style="padding:10px 12px;text-align:center;color:#2e7d32">TU Wien<br><span style="font-weight:400;font-size:.7rem">IGRA2 Viz</span></th>
+          <th style="padding:10px 12px;text-align:center;color:#6a1b9a">StratoChaser<br><span style="font-weight:400;font-size:.7rem">concept</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Radiosonde hardware</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">RS41 series</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">GS-E/U/I/B</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">none (archive)</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">reusable platform</span></td>
+        </tr>
+        <tr style="background:#fafbff"><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Single-use / reusable</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">single-use</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">single-use</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0">—</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">reusable ✓</span></td>
+        </tr>
+        <tr><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Open sensor payload</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">proprietary only</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">proprietary only</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0">—</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">open platform ✓</span></td>
+        </tr>
+        <tr style="background:#fafbff"><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Max altitude reached</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0">~35 km (burst)</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0">~35 km (burst)</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0">~35 km (archive)</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">30–50 km reusable</span></td>
+        </tr>
+        <tr><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Skew-T / Tephigram</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">MetGRAPH</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">grawMet ✓</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge partial">basic</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">web-native ✓</span></td>
+        </tr>
+        <tr style="background:#fafbff"><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">BUFR encoding</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">native</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">native + decoder</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">none</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">mapped + custom ✓</span></td>
+        </tr>
+        <tr><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Multi-model database</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">proprietary DB</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">proprietary DB</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge partial">flat files</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">ArangoDB ✓</span></td>
+        </tr>
+        <tr style="background:#fafbff"><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Open API / data access</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">closed</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge partial">FTP/SFTP/email</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">GitHub / open</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">REST API ✓</span></td>
+        </tr>
+        <tr><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Researcher payload data ownership</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">vendor-controlled</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">vendor-controlled</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">researcher</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">researcher ✓</span></td>
+        </tr>
+        <tr style="background:#fafbff"><td style="padding:8px 12px;font-weight:500;border-bottom:1px solid #f0f0f0">Environmental impact</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">high (disposable)</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge custom">high (disposable)</span></td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0">—</td>
+          <td style="text-align:center;border-bottom:1px solid #f0f0f0"><span class="badge std">low (reusable) ✓</span></td>
+        </tr>
+        <tr><td style="padding:8px 12px;font-weight:500">Price point</td>
+          <td style="text-align:center">€€€€ enterprise</td>
+          <td style="text-align:center">€€€ professional</td>
+          <td style="text-align:center">free (research)</td>
+          <td style="text-align:center"><span class="badge std">TBD / accessible</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Reference cards -->
+  <div class="grid-2" style="margin-bottom:16px">
+
+    <!-- GRAW -->
+    <div class="card" style="border-top:4px solid #1565c0">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <h3 style="font-size:.95rem;font-weight:700;margin-bottom:2px">GRAW Radiosondes — grawMet</h3>
+          <div style="font-size:.72rem;color:#889">Nuremberg, DE · professional / NMS market</div>
+        </div>
+        <a href="https://www.graw.de/products/software/grawmet" target="_blank"
+           style="font-size:.72rem;color:#4cc9f0;text-decoration:none">graw.de ↗</a>
+      </div>
+      <p style="font-size:.78rem;line-height:1.7;margin-bottom:10px">
+        Database-driven meteorological software for daily radiosonde measurements. Full suite of thermodynamic diagrams (Tephigram, Skew-T, Emagram, Stüve, Hodograph), flight map via OpenStreetMap/Bing, real-time status bar, BUFR decoder. Proprietary hardware lock-in (GS-E/U/I/B and multiSonde systems). Integrates with Sounding Center and grawGo mobile. Data export via HTTPS, FTP, SFTP, email.
+      </p>
+      <div class="tag-row">
+        <span class="tag green">Skew-T / Tephigram</span>
+        <span class="tag green">BUFR native</span>
+        <span class="tag green">Hodograph</span>
+        <span class="tag orange">Proprietary hardware</span>
+        <span class="tag orange">Single-use balloons</span>
+        <span class="tag orange">Closed ecosystem</span>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:#fff3e0;border-radius:6px;font-size:.75rem;line-height:1.6">
+        <strong>Relevance:</strong> Sets the standard for diagram formats (grawMet supports every standard thermodynamic diagram). Their BUFR decoder tool signals awareness that BUFR complexity is a pain point. Note they publish a sustainability page explicitly about the <em>environmental impact of radiosondes</em> — reusability is an industry pressure point.
+      </div>
+    </div>
+
+    <!-- Vaisala -->
+    <div class="card" style="border-top:4px solid #c05e00">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <h3 style="font-size:.95rem;font-weight:700;margin-bottom:2px">Vaisala — DigiCORA / RS41</h3>
+          <div style="font-size:.72rem;color:#889">Vantaa, FI · dominant NMS / WMO market leader</div>
+        </div>
+        <a href="https://www.vaisala.com" target="_blank"
+           style="font-size:.72rem;color:#4cc9f0;text-decoration:none">vaisala.com ↗</a>
+      </div>
+      <p style="font-size:.78rem;line-height:1.7;margin-bottom:10px">
+        Global market leader in upper-air sounding. RS41 series is the WMO reference sonde; DigiCORA software handles multi-sounding, automated workflows, real-time relay, secure data transfer. Deep integration with national met service infrastructure. MetGRAPH add-on provides thermodynamic diagrams. Entirely proprietary — hardware, software, and data pipeline are vendor-controlled. Extremely expensive per-launch cost.
+      </p>
+      <div class="tag-row">
+        <span class="tag green">WMO reference standard</span>
+        <span class="tag green">Multi-sounding</span>
+        <span class="tag green">Proven NMS deployment</span>
+        <span class="tag red">Proprietary lock-in</span>
+        <span class="tag red">High per-launch cost</span>
+        <span class="tag red">No open payload</span>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:#fff3e0;border-radius:6px;font-size:.75rem;line-height:1.6">
+        <strong>Relevance:</strong> The benchmark every NMS buyer compares against. StratoChaser doesn't need to beat Vaisala on established NMS workflows — the opening is in research institutions, universities, and emerging economies priced out of Vaisala's ecosystem. Open payload + reusability = different buyer.
+      </div>
+    </div>
+
+    <!-- TU Wien -->
+    <div class="card" style="border-top:4px solid #2e7d32">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <h3 style="font-size:.95rem;font-weight:700;margin-bottom:2px">TU Wien — IGRA2 Visualization Tool</h3>
+          <div style="font-size:.72rem;color:#889">Vienna, AT · academic / open source · 2021</div>
+        </div>
+        <a href="https://www.cg.tuwien.ac.at/courses/Vis2/HallOfFame/2021S/Interactive%20Visualization%20of%20Radiosonde%20Stations/hall.html" target="_blank"
+           style="font-size:.72rem;color:#4cc9f0;text-decoration:none;word-break:break-all">cg.tuwien.ac.at ↗</a>
+      </div>
+      <p style="font-size:.78rem;line-height:1.7;margin-bottom:10px">
+        Python/Plotly/Dash visualization of the IGRA2 global radiosonde archive (~3,000 stations, records from early 1900s to near-real-time). Geo-scatter maps, time-range sliders, station data tables, temperature time series at 1000 hPa. Built on the comparative geospatial visualization technique of Janicke et al. (2012). Open source, research-grade, not production software. Illustrates the depth of the historical dataset available for benchmarking.
+      </p>
+      <div class="tag-row">
+        <span class="tag green">Open source</span>
+        <span class="tag green">IGRA2 archive (3000+ stations)</span>
+        <span class="tag green">Historical depth (100+ years)</span>
+        <span class="tag blue">Python / Plotly / Dash</span>
+        <span class="tag orange">Research only, not production</span>
+        <span class="tag orange">No real-time ingestion</span>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:#e8f5e9;border-radius:6px;font-size:.75rem;line-height:1.6">
+        <strong>Relevance:</strong> Demonstrates appetite for interactive radiosonde visualization in academic settings. The IGRA2 dataset is the natural historical baseline for any new radiosonde platform — StratoChaser data should eventually contribute to it. Austrian academic origin is directly relevant to the local ecosystem.
+      </div>
+    </div>
+
+    <!-- RMetS paper -->
+    <div class="card" style="border-top:4px solid #6a1b9a">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <h3 style="font-size:.95rem;font-weight:700;margin-bottom:2px">RMetS — Geoscience Data Journal (2025)</h3>
+          <div style="font-size:.72rem;color:#889">Royal Meteorological Society · doi:10.1002/gdj3.70034</div>
+        </div>
+        <a href="https://rmets.onlinelibrary.wiley.com/doi/10.1002/gdj3.70034" target="_blank"
+           style="font-size:.72rem;color:#4cc9f0;text-decoration:none">rmets ↗</a>
+      </div>
+      <p style="font-size:.78rem;line-height:1.7;margin-bottom:10px">
+        Peer-reviewed publication in the Royal Meteorological Society's <em>Geoscience Data Journal</em> (2025) addressing radiosonde data standardisation, archiving, or visualization — the GDJ focus is specifically on making geoscience datasets FAIR (Findable, Accessible, Interoperable, Reusable). The journal publishes data description papers that establish community standards for how atmospheric observation data should be structured, documented, and shared.
+      </p>
+      <div class="tag-row">
+        <span class="tag purple">FAIR data principles</span>
+        <span class="tag purple">Peer-reviewed standard</span>
+        <span class="tag purple">RMetS / WMO aligned</span>
+        <span class="tag blue">2025 publication</span>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:#f3e5f5;border-radius:6px;font-size:.75rem;line-height:1.6">
+        <strong>Relevance:</strong> FAIR data compliance is increasingly a requirement for publicly-funded atmospheric research. A StratoChaser data architecture built on FAIR principles from day one (documented schema, BUFR compliance, open API, persistent identifiers) positions it for EU Horizon and WMO data-sharing mandates. Multi-model DB supports FAIR natively.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CPAS full width -->
+  <div class="card" style="border-top:4px solid #f77f00;margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+      <div>
+        <h3 style="font-size:.95rem;font-weight:700;margin-bottom:2px">CPAS / ClusterTech — Skew-T Log-P MOOC Module</h3>
+        <div style="font-size:.72rem;color:#889">Hong Kong Science Park · atmospheric modelling + education · NWP/MPAS-A focus</div>
+      </div>
+      <a href="https://cpas.earth/education/mooc/week6/module21/b_Visualize%20radiosonde%20data%20with%20Skew-T%20log-P%20graph" target="_blank"
+         style="font-size:.72rem;color:#4cc9f0;text-decoration:none">cpas.earth ↗</a>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <p style="font-size:.78rem;line-height:1.7;margin-bottom:10px">
+          ClusterTech's CPAS platform (Cloud-based Parallel Atmospheric Simulation) includes a MOOC module specifically on Skew-T log-P visualization of radiosonde data. Their core product is NWP/atmospheric modelling (competing with WRF and MPAS-A). The educational module positions Skew-T diagrams as the standard interface between raw radiosonde data and model initialization — exactly the data flow StratoChaser's architecture needs to support.
+        </p>
+        <div class="tag-row">
+          <span class="tag blue">NWP / MPAS-A integration</span>
+          <span class="tag blue">Cloud-based simulation</span>
+          <span class="tag orange">HK-centric market</span>
+          <span class="tag green">Skew-T as standard interface</span>
+        </div>
+      </div>
+      <div style="padding:12px;background:#fff3e0;border-radius:8px;font-size:.78rem;line-height:1.7">
+        <strong>Relevance for data architecture:</strong><br>
+        CPAS treats the Skew-T diagram as the handoff point between observation and NWP model ingestion. This confirms that a StratoChaser data pipeline should output:
+        <ol style="margin:8px 0 0 16px;line-height:2">
+          <li>BUFR files (for NMS/ECMWF ingestion)</li>
+          <li>Skew-T–ready JSON profiles (for web visualization)</li>
+          <li>NWP-ready vertical profiles (for model initialization)</li>
+        </ol>
+        Three output formats, one multi-model store.
+      </div>
+    </div>
+  </div>
+
+  <!-- Opportunity summary -->
+  <div class="card" style="background:#16213e;color:#fff">
+    <h3 style="color:#4cc9f0;margin-bottom:14px">The Gap StratoChaser Fills</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+      <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:14px">
+        <div style="font-size:.8rem;font-weight:700;color:#4cc9f0;margin-bottom:8px">🌍 Accessibility</div>
+        <p style="font-size:.75rem;line-height:1.7;color:#ccd">Vaisala and GRAW serve national met services with five- and six-figure budgets. Universities, NGOs, and research teams in emerging markets are priced out. A reusable, open platform changes the economics of upper-air observation.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:14px">
+        <div style="font-size:.8rem;font-weight:700;color:#06d6a0;margin-bottom:8px">🧪 Open Payload</div>
+        <p style="font-size:.75rem;line-height:1.7;color:#ccd">No existing commercial platform lets researchers mount their own sensors. Every new measurement type requires buying a new proprietary instrument. StratoChaser's open platform makes the radiosonde a <em>research vehicle</em>, not just a weather instrument.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:14px">
+        <div style="font-size:.8rem;font-weight:700;color:#ffd166;margin-bottom:8px">📊 Data Architecture</div>
+        <p style="font-size:.75rem;line-height:1.7;color:#ccd">Existing tools store data in proprietary databases or flat files. A FAIR-compliant, multi-model architecture (document + graph + KV) with BUFR mapping, open REST API, and flexible custom-payload schema is a first-principles rebuild of the radiosonde data stack.</p>
       </div>
     </div>
   </div>
