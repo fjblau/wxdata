@@ -1987,7 +1987,6 @@ function drawFire() {
 }
 
 window.addEventListener('load', () => {
-  drawThermal(); drawAIS(); drawFire()
   selectFile(0)
 })
 </script>
@@ -2119,6 +2118,7 @@ function show(id, btn) {
   btn.classList.add('active')
   if (id === 'analytics') drawAll()
   if (id === 'tephigram') drawTephigram()
+  if (id === 'payloads') { drawThermal(); drawAIS(); drawFire() }
 }
 
 // ── Raw data ────────────────────────────────
